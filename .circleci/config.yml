@@ -30,7 +30,11 @@ jobs:
   test_node_12:
     <<: *tests-template
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:13
+  test_node_12:
+    <<: *tests-template
+    docker:
+      - image: circleci/node:12
 
   test_node_10:
     <<: *tests-template
