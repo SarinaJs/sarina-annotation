@@ -27,7 +27,7 @@ tests-template: &tests-template
     - *run-tests
 
 jobs:
-  test_node_12:
+  test_node_13:
     <<: *tests-template
     docker:
       - image: circleci/node:13
