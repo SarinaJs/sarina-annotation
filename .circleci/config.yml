@@ -59,4 +59,4 @@ workflows:
       - test_node_13
       - test_node_12
       - test_node_10
-      - test_node_8
+      - tag
