@@ -138,7 +138,6 @@ export function getType(type: Class<any>): Type<any> {
 	// process methods
 	const typeMethods: MethodInfo[] = [];
 	for (var methodName in type.prototype) {
-		if (methodName == 'constructor') continue;
 		typeMethods.push(getMethod(type, methodName));
 	}
 
