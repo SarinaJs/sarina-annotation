@@ -1,18 +1,52 @@
-version: 2.1
-orbs:
-  node: circleci/node:13.8.0
+version: 2
+
+aliases:
+  - &restore-cache
+    restore_cache:
+      key: dependency-cache-{{ checksum "package.json" }}
+  - &install
+    run:
+      name: Install dependencies
+      command: yarn install
+  - &build
+    run:
+      name: Build
+      command: yarn build
+  - &run-tests
+    run:
+      name: Test
+      command: yarn test
+
+tests-template: &tests-template
+  working_directory: ~/sarina
+  steps:
+    - checkout
+    - *restore-cache
+    - *install
+    - *build
+    - *run-tests
+
 jobs:
-  build-and-test:
-    executor:
-      name: node/default
-    steps:
-      - checkout
-      - node/with-cache:
-          steps:
-            - run: yarn install
-            - run: yarn test
-            - run: yarn build
+  test_node_12:
+    <<: *tests-template
+    docker:
+      - image: circleci/node:10
+
+  test_node_10:
+    <<: *tests-template
+    docker:
+      - image: circleci/node:10
+
+  test_node_8:
+    <<: *tests-template
+    docker:
+      - image: circleci/node:8
+
 workflows:
+  version: 2
   build-and-test:
     jobs:
-      - build-and-test
+      - test_node_13
+      - test_node_12
+      - test_node_10
+      - test_node_8
