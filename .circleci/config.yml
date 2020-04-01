@@ -40,12 +40,7 @@ jobs:
     <<: *tests-template
     docker:
       - image: circleci/node:10
-  tagging:
-    docker:
-      - image: cibuilds/github:0.10
-    steps:
-      - run: VERSION=$(my-binary --version) && ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/
-
+  
 workflows:
   version: 2
   build-and-test:
@@ -53,4 +48,3 @@ workflows:
       - test_node_13
       - test_node_12
       - test_node_10
-      - tagging
