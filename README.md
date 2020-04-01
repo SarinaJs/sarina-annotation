@@ -2,20 +2,19 @@
 
 A simplified Typescript decorator metadata library
 
-# What is Annotation
 
-Annotations is a Typescript decorator which attachs metadata to the types. Then this metada will be used in order of type reflection on runtime. 
-
-
-# Table Of Contents
 
 - [sarina-annotation](#sarina-annotation)
 - [What is Annotation](#what-is-annotation)
-- [Table Of Contents](#table-of-contents)
 - [Installation](#installation)
 - [Usage](#usage)
   - [Creating an Annotation](#creating-an-annotation)
   - [Reflecting Types](#reflecting-types)
+
+# What is Annotation
+
+Annotations is a Typescript decorator which attachs metadata to the types. Then this metada will be used in order of type reflection on runtime. 
+
 
 # Installation
 
@@ -116,8 +115,41 @@ import {
 const constructorInfo:ConstructorInfo = getConstructor(SampleType);
 const runMethodInfo:MethodInfo = getMethod(SampleType,'run');
 const namePropertyInfo:PropertyInfo = getProperty(SampleType,'name');
-const runMethodMyServiceParameterInfo:PropertyInfo = getProperty(SampleType,'run','myService');
 const typeInfo:PropertyInfo = getType(SampleType);
 
 ```
 
+models:
+```typescript
+export interface ParameterInfo {
+	index: number;
+	annotations: ParameterAnnotation[];
+	type: Class<any>;
+}
+export interface ConstructorInfo {
+	isReflected: boolean;
+	parameters: ParameterInfo[];
+}
+export interface MethodInfo {
+	name: string | symbol;
+	isReflected: boolean;
+	returnType?: Class<any> | void;
+	parameters: ParameterInfo[];
+	annotations: MethodAnnotation[];
+}
+export interface PropertyInfo {
+	name: string | symbol;
+	isReflected: boolean;
+	type?: Class<any>;
+	annotations: PropertyAnnotation[];
+}
+export interface Type<T extends Class<T>> {
+	name: string | symbol;
+	isReflected: boolean;
+	declaringType: Class<T>;
+	constructor: ConstructorInfo;
+	methods: MethodInfo[];
+	properties: PropertyInfo[];
+	annotations: ClassAnnotation[];
+}
+```
