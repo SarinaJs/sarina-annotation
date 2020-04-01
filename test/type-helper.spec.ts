@@ -1,7 +1,6 @@
 import { reflectable, methodAnnotationDecoratorMaker, classAnnotationDecoratorMaker } from '@sarina/annotation';
 import { getConstructor, getMethod, getProperty, getType } from '@sarina/annotation';
 import { parameterAnnotationDecoratorMaker, propertyAnnotationDecoratorMaker } from '@sarina/annotation';
-import { runInContext } from 'vm';
 
 describe('type-helper', () => {
 	describe('getConstructor', () => {
