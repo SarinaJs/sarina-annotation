@@ -1,0 +1,47 @@
+{
+	"name": "@sarina/annotation",
+	"version": "1.0.0-pre",
+	"description": "A simplified Typescript decorator metadata library",
+	"keywords": [
+		"Sarina",
+		"SarinaJs",
+		"metadata",
+		"attribute",
+		"annotation",
+		"decorator"
+	],
+	"homepage": "https://github.com/SarinaJs/sarina-annotation",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/SarinaJs/sarina-annotation"
+	},
+	"license": "MIT",
+	"author": "Ivan Parvareshi Hamrah",
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"test": "jest --coverage --env=jsdom",
+		"test:watch": "jest --coverage --env=jsdom --watch",
+		"tsc": "tsc"
+	},
+	"bugs": {
+		"email": "dev@ivanisation.net",
+		"url": "https://github.com/SarinaJs/sarina-annotation/issues"
+	},
+	"engines": {
+		"node": ">= 10.13.0"
+	},
+	"devDependencies": {
+		"@types/jest": "^25.1.4",
+		"@types/node": "^13.9.2",
+		"@typescript-eslint/eslint-plugin": "^2.24.0",
+		"@typescript-eslint/parser": "^2.24.0",
+		"eslint": "^6.8.0",
+		"eslint-config-prettier": "^6.10.0",
+		"eslint-plugin-prettier": "^3.1.2",
+		"jest": "25.1.0",
+		"prettier": "^1.19.1",
+		"reflect-metadata": "^0.1.13",
+		"ts-jest": "^25.2.1",
+		"typescript": "^3.8.3"
+	}
+}
