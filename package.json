@@ -1,6 +1,6 @@
 {
 	"name": "@sarina/annotation",
-	"version": "1.0.3-pre01",
+	"version": "1.0.3-build0001",
 	"description": "A simplified Typescript decorator metadata library",
 	"keywords": [
 		"Sarina",

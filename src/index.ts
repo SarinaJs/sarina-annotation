@@ -1,6 +1,10 @@
 import 'reflect-metadata';
 
+// Types
 export * from './class.type';
+
+// Erros
+export * from './errors';
 
 // Annotation-Util
 export * from './annotation';
