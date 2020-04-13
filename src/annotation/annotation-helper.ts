@@ -1,4 +1,11 @@
+import { Class } from '../class.type';
 import { ANNOTATIONS_KEY } from './consts';
+import {
+	ClassAnnotationAlreadyExistsError,
+	PropertyAnnotationAlreadyExistsError,
+	ParameterAnnotationAlreadyExistsError,
+	MethodAnnotationAlreadyExistsError,
+} from './../errors';
 import { AnnotationTypes, Annotation, ClassAnnotation, MethodAnnotation, PropertyAnnotation } from './annotation.type';
 import {
 	ANNOTATION_CLASS_DEF_KEY,
@@ -56,7 +63,7 @@ export const classAnnotationDecoratorMaker = (name: string, isMulti: boolean, da
 		//	single: only one annotation of type should be able to define for target
 		if (!isMulti)
 			if (annotations.findIndex((dec: Annotation) => dec.type == 'class' && dec.name == name) > -1)
-				throw new Error(`${name} annotation already exists!`);
+				throw new ClassAnnotationAlreadyExistsError(target as Class<any>, name);
 
 		// push into annotations list
 		setAnnotation<ClassAnnotation>(target, {
@@ -97,7 +104,7 @@ export const methodAnnotationDecoratorMaker = (name: string, isMulti: boolean, d
 						dec.name == name,
 				) > -1
 			)
-				throw new Error(`${name} annotation already exists!`);
+				throw new MethodAnnotationAlreadyExistsError(target.constructor as Class<any>, propertyKey, name);
 
 		// push into annotations list
 		setAnnotation(target.constructor, {
@@ -155,7 +162,7 @@ export const parameterAnnotationDecoratorMaker = (name: string, isMulti: boolean
 						dec.name == name,
 				) > -1
 			)
-				throw new Error(`${name} annotation already exists!`);
+				throw new ParameterAnnotationAlreadyExistsError(theTarget as Class<any>, methodName, parameterIndex, name);
 
 		setAnnotation(theTarget, {
 			type: 'parameter',
@@ -182,7 +189,7 @@ export const propertyAnnotationDecoratorMaker = (name: string, isMulti: boolean,
 						dec.name == name,
 				) > -1
 			)
-				throw new Error(`${name} annotation already exists!`);
+				throw new PropertyAnnotationAlreadyExistsError(target.constructor as Class<any>, propertyKey, name);
 
 		// the parameter-decorator can apply to the method/property/constructor
 		//		- propertyKey == undefined -> if the function is constructor
