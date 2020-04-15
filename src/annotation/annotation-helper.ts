@@ -18,7 +18,7 @@ import {
 
 // Methods
 export function getAnnotations<TAnnotation extends Annotation>(
-	target: Object,
+	target: any,
 	filter?: { type?: AnnotationTypes; name?: string },
 ): TAnnotation[] {
 	const getOrDefineAnnotations = () => {
@@ -43,7 +43,7 @@ export function getAnnotations<TAnnotation extends Annotation>(
 		...annotations.filter((s) => (!filter.name || s.name == filter.name) && (!filter.type || s.type == filter.type)),
 	];
 }
-export function setAnnotation<TAnnotation extends Annotation>(target: Object, annotation: TAnnotation): void {
+export function setAnnotation<TAnnotation extends Annotation>(target: any, annotation: TAnnotation): void {
 	let annotations: TAnnotation[] = null;
 	if (Reflect.hasMetadata(ANNOTATIONS_KEY, target))
 		annotations = Reflect.getMetadata(ANNOTATIONS_KEY, target) as TAnnotation[];
@@ -89,7 +89,7 @@ export const classAnnotationDecoratorMaker = (name: string, isMulti: boolean, da
 	};
 };
 export const methodAnnotationDecoratorMaker = (name: string, isMulti: boolean, data?: any): MethodDecorator => {
-	return (target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): void => {
+	return (target: any, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): void => {
 		// fetch type annotations array
 		const annotations = getAnnotations(target.constructor);
 
@@ -140,7 +140,7 @@ export const methodAnnotationDecoratorMaker = (name: string, isMulti: boolean, d
 	};
 };
 export const parameterAnnotationDecoratorMaker = (name: string, isMulti: boolean, data?: any): ParameterDecorator => {
-	return (target: Object, propertyKey: string | symbol, parameterIndex: number): void => {
+	return (target: any, propertyKey: string | symbol, parameterIndex: number): void => {
 		// get the method name and the target
 		// 	- if property-key be null, it means the parameter has defined in constructor,
 		//			the constructor is keywrod and only one function with `constructor` can be define in class
@@ -174,7 +174,7 @@ export const parameterAnnotationDecoratorMaker = (name: string, isMulti: boolean
 	};
 };
 export const propertyAnnotationDecoratorMaker = (name: string, isMulti: boolean, data?: any): PropertyDecorator => {
-	return (target: Object, propertyKey: string | symbol): void => {
+	return (target: any, propertyKey: string | symbol): void => {
 		// fetch type annotations array
 		const annotations = getAnnotations(target.constructor);
 
