@@ -16,6 +16,12 @@ import {
 	propertyAnnotationDecoratorMaker,
 } from '@sarina/annotation';
 import { ANNOTATION_CLASS_DEF_KEY, ANNOTATION_METHOD_DEF_KEY, ANNOTATION_PROPERTY_DEF_KEY } from '@sarina/annotation';
+import {
+	ClassAnnotationAlreadyExistsError,
+	MethodAnnotationAlreadyExistsError,
+	PropertyAnnotationAlreadyExistsError,
+	ParameterAnnotationAlreadyExistsError,
+} from '@sarina/annotation';
 
 describe('annotation', () => {
 	describe('annotation-helper', () => {
@@ -269,7 +275,12 @@ describe('annotation', () => {
 				const action = () => decorator(SampleType);
 
 				// Assert
-				expect(action).toThrow('my_decorator annotation already exists!');
+				try {
+					action();
+				} catch (err) {
+					const error = err as ClassAnnotationAlreadyExistsError;
+					expect(error.message).toBe("Annotation 'my_decorator' already have defined for 'SampleType'.");
+				}
 			});
 			it('should_define_multiple_annotation_if_is_multi', () => {
 				// Arrange
@@ -380,7 +391,14 @@ describe('annotation', () => {
 				const action = () => decorator(SampleType.prototype, 'run', {});
 
 				// Assert
-				expect(action).toThrow('my_decorator annotation already exists!');
+				try {
+					action();
+				} catch (err) {
+					const error = err as MethodAnnotationAlreadyExistsError;
+					expect(error.message).toBe(
+						"Annotation 'my_decorator' already have defined for 'run' method of 'SampleType'.",
+					);
+				}
 			});
 			it('should_define_multiple_annotation_if_is_multi', () => {
 				// Arrange
@@ -536,7 +554,14 @@ describe('annotation', () => {
 				const action = () => decorator(SampleType, null, 0);
 
 				// Assert
-				expect(action).toThrow('my_decorator annotation already exists!');
+				try {
+					action();
+				} catch (err) {
+					const error = err as ParameterAnnotationAlreadyExistsError;
+					expect(error.message).toBe(
+						"Annotation 'my_decorator' already have defined for 'constructor#0' method parameter of 'SampleType'.",
+					);
+				}
 			});
 			it('should_define_multiple_annotation_if_is_multi', () => {
 				// Arrange
@@ -608,7 +633,14 @@ describe('annotation', () => {
 				const action = () => decorator(SampleType.prototype, 'title');
 
 				// Assert
-				expect(action).toThrow('my_decorator annotation already exists!');
+				try {
+					action();
+				} catch (err) {
+					const error = err as ParameterAnnotationAlreadyExistsError;
+					expect(error.message).toBe(
+						"Annotation 'my_decorator' already have defined for 'title' property of 'SampleType'.",
+					);
+				}
 			});
 			it('should_define_multiple_annotation_if_is_multi', () => {
 				// Arrange

@@ -14,6 +14,9 @@ import {
 	MethodTypeDef,
 	PropertyTypeDef,
 } from './annotation';
+import {
+	MethodNotFoundError
+} from './errors';
 
 // Interfaces
 export interface ParameterInfo {
@@ -79,7 +82,7 @@ export function getConstructor(type: Class<any>): ConstructorInfo {
 export function getMethod(type: Class<any>, name: string): MethodInfo {
 	// check method exists
 	const method = type.prototype[name];
-	if (!method) throw new Error(`Method '${name}' not found.`);
+	if (!method) throw new MethodNotFoundError(type,name);
 
 	const annotations = getAnnotations(type);
 

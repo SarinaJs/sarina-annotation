@@ -1,4 +1,11 @@
+import { Class } from '../class.type';
 import { ANNOTATIONS_KEY } from './consts';
+import {
+	ClassAnnotationAlreadyExistsError,
+	PropertyAnnotationAlreadyExistsError,
+	ParameterAnnotationAlreadyExistsError,
+	MethodAnnotationAlreadyExistsError,
+} from './../errors';
 import { AnnotationTypes, Annotation, ClassAnnotation, MethodAnnotation, PropertyAnnotation } from './annotation.type';
 import {
 	ANNOTATION_CLASS_DEF_KEY,
@@ -11,7 +18,7 @@ import {
 
 // Methods
 export function getAnnotations<TAnnotation extends Annotation>(
-	target: Object,
+	target: any,
 	filter?: { type?: AnnotationTypes; name?: string },
 ): TAnnotation[] {
 	const getOrDefineAnnotations = () => {
@@ -36,7 +43,7 @@ export function getAnnotations<TAnnotation extends Annotation>(
 		...annotations.filter((s) => (!filter.name || s.name == filter.name) && (!filter.type || s.type == filter.type)),
 	];
 }
-export function setAnnotation<TAnnotation extends Annotation>(target: Object, annotation: TAnnotation): void {
+export function setAnnotation<TAnnotation extends Annotation>(target: any, annotation: TAnnotation): void {
 	let annotations: TAnnotation[] = null;
 	if (Reflect.hasMetadata(ANNOTATIONS_KEY, target))
 		annotations = Reflect.getMetadata(ANNOTATIONS_KEY, target) as TAnnotation[];
@@ -56,7 +63,7 @@ export const classAnnotationDecoratorMaker = (name: string, isMulti: boolean, da
 		//	single: only one annotation of type should be able to define for target
 		if (!isMulti)
 			if (annotations.findIndex((dec: Annotation) => dec.type == 'class' && dec.name == name) > -1)
-				throw new Error(`${name} annotation already exists!`);
+				throw new ClassAnnotationAlreadyExistsError(target as Class<any>, name);
 
 		// push into annotations list
 		setAnnotation<ClassAnnotation>(target, {
@@ -82,7 +89,7 @@ export const classAnnotationDecoratorMaker = (name: string, isMulti: boolean, da
 	};
 };
 export const methodAnnotationDecoratorMaker = (name: string, isMulti: boolean, data?: any): MethodDecorator => {
-	return (target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): void => {
+	return (target: any, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): void => {
 		// fetch type annotations array
 		const annotations = getAnnotations(target.constructor);
 
@@ -97,7 +104,7 @@ export const methodAnnotationDecoratorMaker = (name: string, isMulti: boolean, d
 						dec.name == name,
 				) > -1
 			)
-				throw new Error(`${name} annotation already exists!`);
+				throw new MethodAnnotationAlreadyExistsError(target.constructor as Class<any>, propertyKey, name);
 
 		// push into annotations list
 		setAnnotation(target.constructor, {
@@ -133,7 +140,7 @@ export const methodAnnotationDecoratorMaker = (name: string, isMulti: boolean, d
 	};
 };
 export const parameterAnnotationDecoratorMaker = (name: string, isMulti: boolean, data?: any): ParameterDecorator => {
-	return (target: Object, propertyKey: string | symbol, parameterIndex: number): void => {
+	return (target: any, propertyKey: string | symbol, parameterIndex: number): void => {
 		// get the method name and the target
 		// 	- if property-key be null, it means the parameter has defined in constructor,
 		//			the constructor is keywrod and only one function with `constructor` can be define in class
@@ -155,7 +162,7 @@ export const parameterAnnotationDecoratorMaker = (name: string, isMulti: boolean
 						dec.name == name,
 				) > -1
 			)
-				throw new Error(`${name} annotation already exists!`);
+				throw new ParameterAnnotationAlreadyExistsError(theTarget as Class<any>, methodName, parameterIndex, name);
 
 		setAnnotation(theTarget, {
 			type: 'parameter',
@@ -167,7 +174,7 @@ export const parameterAnnotationDecoratorMaker = (name: string, isMulti: boolean
 	};
 };
 export const propertyAnnotationDecoratorMaker = (name: string, isMulti: boolean, data?: any): PropertyDecorator => {
-	return (target: Object, propertyKey: string | symbol): void => {
+	return (target: any, propertyKey: string | symbol): void => {
 		// fetch type annotations array
 		const annotations = getAnnotations(target.constructor);
 
@@ -182,7 +189,7 @@ export const propertyAnnotationDecoratorMaker = (name: string, isMulti: boolean,
 						dec.name == name,
 				) > -1
 			)
-				throw new Error(`${name} annotation already exists!`);
+				throw new PropertyAnnotationAlreadyExistsError(target.constructor as Class<any>, propertyKey, name);
 
 		// the parameter-decorator can apply to the method/property/constructor
 		//		- propertyKey == undefined -> if the function is constructor

@@ -1,6 +1,7 @@
 import { reflectable, methodAnnotationDecoratorMaker, classAnnotationDecoratorMaker } from '@sarina/annotation';
 import { getConstructor, getMethod, getProperty, getType } from '@sarina/annotation';
 import { parameterAnnotationDecoratorMaker, propertyAnnotationDecoratorMaker } from '@sarina/annotation';
+import { MethodNotFoundError } from '@sarina/annotation';
 
 describe('type-helper', () => {
 	describe('getConstructor', () => {
@@ -74,7 +75,7 @@ describe('type-helper', () => {
 			const action = () => getMethod(SampleType, 'run');
 
 			// Assert
-			expect(action).toThrow("Method 'run' not found.");
+			expect(action).toThrowError(new MethodNotFoundError(SampleType, 'run'));
 		});
 		it('should_return_result_with_not_reflected_value', () => {
 			// Arrange
