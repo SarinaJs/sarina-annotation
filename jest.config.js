@@ -14,4 +14,12 @@ module.exports = {
 		'@sarina/annotation/(.*)': '<rootDir>/src/$1',
 		'@sarina/annotation': '<rootDir>/src/index.ts',
 	},
+	coverageThreshold: {
+		global: {
+			branches: 80,
+			functions: 80,
+			lines: 80,
+			statements: -10,
+		},
+	},
 };
